@@ -4,7 +4,7 @@ import style from './style';
 
 const Button = (props) => {
   return (
-    <button class={`${style.button} ${props.class}`}>
+    <button class={`${style.button} ${props.class}`} onClick={props.onClick}>
       {props.children}
     </button>
   );

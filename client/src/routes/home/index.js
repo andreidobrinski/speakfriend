@@ -11,6 +11,13 @@ const defaultSubmissionForm = {
  bio:    ""
 }
 
+const hostSubmissionForm = {
+  email: "",
+  name: "",
+  location: "",
+  capacity: "",
+}
+
 export default class Home extends Component {
   state = {
     faqOpen: false,
@@ -80,7 +87,7 @@ export default class Home extends Component {
     </section>
   );
 
-  submissionFormView = () => {
+  speakerSubmissionFormView = () => {
     const { errors, submissionForm } = this.state;
     const { email, name, topics, bio } = submissionForm;
     return (
@@ -140,6 +147,66 @@ export default class Home extends Component {
     );
   };
 
+  hostSubmissionFormView = () => {
+    const { errors, submissionForm } = this.state;
+    const { email, name, location, capacity } = submissionForm;
+    return (
+      <form class="flex flex-column mv5 w-50 center" onSubmit={this.submitForm}>
+        <Input
+          id="email"
+          label="Email address *"
+          class="pa2"
+          value={email}
+          handleChange={this.updateForm}
+          errorStyle={style.inputError}
+          error={errors.email}
+        />
+
+        <div class="flex flex-column mb4">
+          <label for="name">What is your name? *</label>
+          <input
+            class="pa2"
+            id="name"
+            type="text"
+            value={name}
+            onChange={this.updateForm}
+            placeholder="Name"
+          />
+          {errors.name && <span class={style.inputError}>{errors.name}</span>}
+        </div>
+
+        <div class="flex flex-column mb4">
+          <label for="location">
+            Where is the venue located? *
+          </label>
+          <input
+            class="pa2"
+            id="location"
+            type="text"
+            placeholder="Location"
+            onChange={this.updateForm}
+            value={location}
+          />
+          {errors.location && <span class={style.inputError}>{errors.location}</span>}
+        </div>
+
+        <div class="flex flex-column mb4">
+          <label for="capacity">Approximate capacity</label>
+          <textarea
+            class="pa2"
+            id="capacity"
+            onChange={this.updateForm}
+            value={capacity}
+            placeholder="Capacity"
+          />
+          {errors.capacity && <span class={style.inputError}>{errors.capacity}</span>}
+        </div>
+
+        <Button class="mv2">Submit</Button>
+      </form>
+    );
+  };
+
   // --
 
   render() {
@@ -158,8 +225,18 @@ export default class Home extends Component {
             <h3 class="f2 lh-copy">
               A portal for connecting speakers, mentors, and friends.
             </h3>
-            <Button class="mr4">I'm looking to give a talk! 🎤 </Button>
-            <Button>I can host talks! 🏫</Button>
+            <Button
+              class="mr4"
+              onClick={() => this.setState({ submissionForm: defaultSubmissionForm })}
+            >
+              I'm looking to give a talk! 🎤
+            </Button>
+            <Button onClick={() => {
+              this.setState({ submissionForm: hostSubmissionForm });
+              console.log('hello');
+            }}>
+              I can host talks! 🏫
+            </Button>
           </div>
         </header>
 
@@ -168,7 +245,11 @@ export default class Home extends Component {
 
         {/* SECTION: Form Submission */}
         <section class="pv4 center">
-          <h1 class="f1 lh-title tc">I'd like to give a talk!</h1>
+          <h1 class="f1 lh-title tc">
+            I'd like to
+            {this.state.submissionForm === defaultSubmissionForm && ' give a talk!'}
+            {this.state.submissionForm === hostSubmissionForm && ' host a talk!'}
+          </h1>
           <p class="w-50 center tc">
             Awesome. Feel free to read our
             {" "}
@@ -178,7 +259,8 @@ export default class Home extends Component {
           </p>
 
           {this.state.faqOpen && this.faqView()}
-          {this.submissionFormView()}
+          {this.state.submissionForm === defaultSubmissionForm && this.speakerSubmissionFormView()}
+          {this.state.submissionForm === hostSubmissionForm && this.hostSubmissionFormView()}
 
         </section>
 
