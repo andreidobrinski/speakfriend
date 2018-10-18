@@ -233,7 +233,6 @@ export default class Home extends Component {
             </Button>
             <Button onClick={() => {
               this.setState({ submissionForm: hostSubmissionForm });
-              console.log('hello');
             }}>
               I can host talks! 🏫
             </Button>
